@@ -1,0 +1,62 @@
+name: birdablo_mobile
+description: Birdablo - Kawaii sample app.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  location: ^3.2.4
+  flutter_bloc: ^6.1.2
+  flutter_modular: ^2.0.1
+  flutter_form_builder: ^4.2.0
+  animations: ^1.1.2
+  path_provider: ^1.6.27
+  i18n_extension: ^2.0.0
+  fluttertoast: ^7.1.8
+  dio: ^3.0.10
+  json_annotation: ^3.1.1
+  url_launcher: ^5.7.10
+  font_awesome_flutter: ^8.11.0
+  shared_preferences: ^0.5.12+4
+  timeago: ^2.0.29
+  flutter_typeahead: "<=1.9.1"
+  flutter_map: ^0.11.0
+  flutter_neumorphic: ^2.2.2
+  sliding_up_panel: ^1.0.2
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^3.5.1
+  build_runner: ^1.10.13
+  intl: any
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/images/navigation-bar/
+    - assets/images/explore/
+
+
+  fonts:
+    - family: SF-Pro
+      fonts:
+        - asset: assets/fonts/SF-Pro.ttf
+        - asset: assets/fonts/SF-Pro-Italic.ttf
+          style: italic
