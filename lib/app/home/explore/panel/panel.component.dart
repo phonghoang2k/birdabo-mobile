@@ -91,25 +91,25 @@ class _PanelWidgetState extends State<PanelWidget> {
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     physics: ScrollPhysics(),
                     child: Row(
                       children: List.generate(
-                          4,
-                          (index) => NeumorphicButton(
-                                margin: EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
-                                onPressed: () {},
-                                style: NeumorphicStyle(
-                                    color: Colors.white,
-                                    depth: 10,
-                                    shadowLightColorEmboss: Color.fromRGBO(191, 221, 255, 0.5),
-                                    shadowLightColor: Color.fromRGBO(191, 221, 255, 0.5)),
-                                boxShape: NeumorphicBoxShape.stadium(),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
-                                  child: Text("Category".i18n, style: TextStyle(color: Color(0xFF2196F3), fontWeight: FontWeight.w700, fontSize: 13)),
-                                ),
-                              )),
+                        4,
+                        (index) => NeumorphicButton(
+                          margin: EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
+                          onPressed: () {},
+                          style: NeumorphicStyle(
+                              color: Colors.white,
+                              shadowLightColorEmboss: Color.fromRGBO(191, 221, 255, 0.5),
+                              shadowLightColor: Color.fromRGBO(191, 221, 255, 0.5),),
+                          boxShape: NeumorphicBoxShape.stadium(),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal * 2),
+                            child: Text("Category".i18n, style: TextStyle(color: Color(0xFF2196F3), fontWeight: FontWeight.w700, fontSize: 13)),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

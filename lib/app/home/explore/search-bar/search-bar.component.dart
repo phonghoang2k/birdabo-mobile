@@ -19,7 +19,6 @@ class _SearchBarState extends State<SearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: SizeConfig.safeBlockVertical * 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       elevation: 11,
       shadowColor: Color.fromRGBO(191, 221, 255, 0.5),
@@ -34,15 +33,16 @@ class _SearchBarState extends State<SearchBarWidget> {
               child: Neumorphic(
                 boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
                 margin: EdgeInsets.symmetric(vertical: SizeConfig.safeBlockVertical),
-                style: NeumorphicStyle(color: Color(0xFFFAFAFA), depth: -10, shadowLightColorEmboss: Color(0xFFEAF4FF)),
+                style: NeumorphicStyle(color: Colors.white, depth: -10, shadowLightColorEmboss: Color(0xFFEAF4FF), shape: NeumorphicShape.concave),
                 child: FormBuilderTextField(
                   onTap: widget.onPressedSearch,
                   name: "search",
                   decoration: InputDecoration(
+                      isDense: true,
                       border: InputBorder.none,
                       hintText: "Search places and routes".i18n,
                       prefixIcon: Icon(Icons.search),
-                      prefixIconConstraints: BoxConstraints(minWidth: 40)),
+                      prefixIconConstraints: BoxConstraints(minWidth: 35)),
                 ),
               ),
             ),
@@ -50,7 +50,7 @@ class _SearchBarState extends State<SearchBarWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(180),
               child: InkWell(
-                child: Image.asset("assets/images/explore/avt.png"),
+                child: Image.asset("assets/images/explore/avt.png", height: SizeConfig.safeBlockVertical * 6),
                 onTap: widget.onPressedAvatar,
               ),
             )
