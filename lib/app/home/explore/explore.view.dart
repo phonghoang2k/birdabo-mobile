@@ -73,7 +73,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               builder: (context, state) => AnimatedPositioned(
                 duration: const Duration(seconds: 1),
                 curve: Curves.fastLinearToSlowEaseIn,
-                top: (_cubit.isSwipeUp ? -3 : 1) * SizeConfig.safeBlockVertical * 4,
+                top: (_cubit.isSwipeUp ? -3.5 : 1.0) * SizeConfig.safeBlockVertical * 4,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -93,56 +93,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 bottom: _cubit.offset,
                 duration: const Duration(milliseconds: 0),
                 curve: Curves.fastLinearToSlowEaseIn,
-                child: SizedBox(
-                  width: SizeConfig.screenWidth,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      CommonButton(
-                        onPressed: () {},
-                        depth: 11,
-                        child: IntrinsicWidth(
-                          child: Row(
-                            children: [
-                              Image.asset("assets/images/explore/feedback.png", height: 20),
-                              SizedBox(width: SizeConfig.safeBlockHorizontal),
-                              Text("Feedback", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-                      IntrinsicHeight(
-                        child: Column(
-                          children: [
-                            FlatButton(
-                              padding: EdgeInsets.zero,
-                              onPressed: () => print("aa"),
-                              shape: CircleBorder(side: BorderSide.none),
-                              child: Container(
-                                padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 4),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                      colors: [Color(0xFF7AC0EE), Color(0xFF5798D9), Color(0xFF2196F3)],
-                                    )),
-                                child: ImageIcon(AssetImage("assets/images/explore/go-icon.png"), size: 30, color: Colors.white),
-                              ),
-                            ),
-                            SizedBox(height: SizeConfig.safeBlockVertical),
-                            FloatingActionButton(
-                              onPressed: () => {_mapController.move(LatLng(21.016147, 105.793532), 15.0), _mapController.rotate(0)},
-                              backgroundColor: Colors.white,
-                              child: Image.asset("assets/images/explore/mylocation.png"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: buildFloatingButtons(),
               ),
             )
           ],
@@ -150,4 +101,57 @@ class _ExploreScreenState extends State<ExploreScreen> {
       ),
     );
   }
+
+  Widget buildFloatingButtons() => SizedBox(
+        width: SizeConfig.screenWidth,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CommonButton(
+              onPressed: () {
+                print("aa");
+              },
+              depth: 11,
+              child: IntrinsicWidth(
+                child: Row(
+                  children: [
+                    Image.asset("assets/images/explore/feedback.png", height: 20),
+                    SizedBox(width: SizeConfig.safeBlockHorizontal),
+                    Text("Feedback", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
+            ),
+            Spacer(),
+            IntrinsicHeight(
+              child: Column(
+                children: [
+                  FlatButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => print("aa"),
+                    shape: CircleBorder(side: BorderSide.none),
+                    child: Container(
+                      padding: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 4),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0xFF7AC0EE), Color(0xFF5798D9), Color(0xFF2196F3)],
+                          )),
+                      child: ImageIcon(AssetImage("assets/images/explore/go-icon.png"), size: 30, color: Colors.white),
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.safeBlockVertical),
+                  FloatingActionButton(
+                    onPressed: () => {_mapController.move(LatLng(21.016147, 105.793532), 15.0), _mapController.rotate(0)},
+                    backgroundColor: Colors.white,
+                    child: Image.asset("assets/images/explore/mylocation.png"),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 }
