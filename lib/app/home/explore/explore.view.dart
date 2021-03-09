@@ -146,7 +146,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   FloatingActionButton(
                     onPressed: () => {_mapController.move(LatLng(21.016147, 105.793532), 15.0), _mapController.rotate(0)},
                     backgroundColor: Colors.white,
-                    child: Image.asset("assets/images/explore/mylocation.png"),
+                    child: Image.asset("assets/images/explore/mylocation.png", width: SizeConfig.safeBlockHorizontal * 8),
                   ),
                 ],
               ),
