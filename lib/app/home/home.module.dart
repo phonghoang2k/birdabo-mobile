@@ -1,5 +1,7 @@
+import 'package:birdablo_mobile/app/home/activity/activity.module.dart';
 import 'package:birdablo_mobile/app/home/explore/explore.module.dart';
 import 'package:birdablo_mobile/app/home/home.view.dart';
+import 'package:birdablo_mobile/app/home/tickets/tickets.module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeModule extends ChildModule {
@@ -18,6 +20,8 @@ class HomeModule extends ChildModule {
   List<ModularRouter> get routers => [
         ModularRouter('/', child: (context, args) => Home()),
         ModularRouter(explore, module: ExploreModule()),
+        ModularRouter(tickets, module: TicketsModule()),
+        ModularRouter(activity, module: ActivityModule()),
         // ModularRouter(dashboard, module: DashboardModule()),
         // ModularRouter(stockChecking, module: StockCheckingModule()),
         // ModularRouter(knowledge, module: KnowledgeModule()),

@@ -1,3 +1,4 @@
+import 'package:birdablo_mobile/app/home/activity/activity.module.dart';
 import 'package:birdablo_mobile/app/home/explore/explore.module.dart';
 import 'package:birdablo_mobile/app/home/home.module.dart';
 import 'package:birdablo_mobile/app/home/tickets/tickets.module.dart';
@@ -15,7 +16,7 @@ class _HomeState extends State<Home> {
     {'image': 'explore', 'label': 'Explore', 'widget': ExploreModule(), 'route': HomeModule.explore},
     {'image': 'commute', 'label': 'Commute', 'widget': Container(), 'route': HomeModule.commute},
     {'image': 'tickets', 'label': 'Tickets', 'widget': TicketsModule(), 'route': HomeModule.tickets},
-    {'image': 'activity', 'label': 'Activity', 'widget': Container(), 'route': HomeModule.activity},
+    {'image': 'activity', 'label': 'Activity', 'widget': ActivityModule(), 'route': HomeModule.activity},
   ];
   int _bottomNavIndex = 0;
 
