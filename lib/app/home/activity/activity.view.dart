@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:birdablo_mobile/app/home/activity/activity.module.dart';
 import 'package:birdablo_mobile/app/home/activity/component/bar-chart/bar-chart.component.dart';
 import 'package:birdablo_mobile/app/home/explore/components/common-button/common-button.component.dart';
+import 'package:birdablo_mobile/app/home/home.module.dart';
 import 'package:birdablo_mobile/config/config_screen.dart';
-import 'package:birdablo_mobile/resources/tickets/tickets.i18n.dart';
+import 'package:birdablo_mobile/resources/activity/activity.i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -146,7 +149,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 Text("11 coupons available".i18n,
                     style: TextStyle(
                       color: Color(0xFF2196F3),
-                      fontSize: 17,
+                      fontSize: 16,
                       letterSpacing: 1.1,
                       fontWeight: FontWeight.w600,
                     )),
@@ -159,6 +162,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       Text("Rewards", style: TextStyle(fontSize: 16)),
                     ],
                   ),
+                  onPressed: () => Modular.link.pushNamed(HomeModule.activity + ActivityModule.yourVoucher),
                 )
               ],
             ),

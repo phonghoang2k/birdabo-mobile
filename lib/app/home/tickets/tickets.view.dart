@@ -1,11 +1,18 @@
+import 'dart:async';
+
 import 'package:birdablo_mobile/app/home/explore/components/common-button/common-button.component.dart';
 import 'package:birdablo_mobile/app/home/explore/components/custom-expansion/custom-expansion.component.dart';
+import 'package:birdablo_mobile/app/home/home.module.dart';
+import 'package:birdablo_mobile/app/home/tickets/tickets.module.dart';
+import 'package:birdablo_mobile/config/application.dart';
 import 'package:birdablo_mobile/config/config_screen.dart';
 import 'package:birdablo_mobile/resources/tickets/tickets.i18n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:intl/intl.dart';
+import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class TicketsScreen extends StatefulWidget {
@@ -14,6 +21,83 @@ class TicketsScreen extends StatefulWidget {
 }
 
 class _TicketsScreenState extends State<TicketsScreen> {
+  StreamSubscription<NDEFMessage> _stream;
+
+  @override
+  void initState() {
+    _toggleScan();
+    super.initState();
+  }
+
+  Future<void> _startScanning() async {
+    Application.toast.showToastNotification("Scanning Reader for Payment");
+    setState(() {
+      _stream = NFC.readNDEF(alertMessage: "Custom message with readNDEF#alertMessage").listen(
+        (NDEFMessage message) {
+          if (message.isEmpty) {
+            Application.toast.showToastNotification("Read empty NDEF message");
+            return;
+          }
+          Application.toast.showToastNotification("Read NDEF message with ${message.records.length} records");
+          for (NDEFRecord record in message.records) {
+            Application.toast.showToastSuccess(
+                "Record '${record.id ?? "[NO ID]"}' with TNF '${record.tnf}', type '${record.type}', payload '${record.payload}' and data '${record.data}' and language code '${record.languageCode}'");
+          }
+        },
+        onError: (error) {
+          setState(() => _stream = null);
+          if (error is NFCUserCanceledSessionException) {
+            Application.toast.showToastFailed("user canceled");
+          } else if (error is NFCSessionTimeoutException) {
+            Application.toast.showToastFailed("session timed out");
+          } else {
+            Application.toast.showToastFailed("error: $error");
+          }
+        },
+        onDone: () => setState(() => _stream = null),
+      );
+    });
+    // fire after 4 second: simulate connected via NFC payment
+    if (await NFC.isNDEFSupported) {
+      Future.delayed(Duration(seconds: 4), _startAuthenticateNFC);
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.pop(context);
+        return Modular.link.pushNamed(HomeModule.tickets + TicketsModule.nfcStatus);
+      });
+    }
+  }
+
+  void _stopScanning() => {_stream?.cancel(), setState(() => _stream = null)};
+
+  void _toggleScan() => _stream == null ? _startScanning() : _stopScanning();
+
+  Future<dynamic> _startAuthenticateNFC() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          elevation: 11,
+          content: SizedBox(
+            width: SizeConfig.safeBlockHorizontal * 60,
+            height: SizeConfig.safeBlockHorizontal * 50,
+            child: Center(
+              child: IntrinsicHeight(
+                child: Column(children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: SizeConfig.safeBlockVertical * 2),
+                  Text("Purchasing Ticket"),
+                ]),
+              ),
+            ),
+          ),
+        ),
+      );
+
+  @override
+  void dispose() {
+    _stopScanning();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
