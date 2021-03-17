@@ -6,7 +6,7 @@ import 'package:birdablo_mobile/resources/tickets/tickets.i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class NFCPaymentSuccess extends StatelessWidget {
+class QRPaymentSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +24,7 @@ class NFCPaymentSuccess extends StatelessWidget {
             SizedBox(height: SizeConfig.safeBlockVertical * 2),
             Text("Your payment is now completed.".i18n, style: TextStyle(fontSize: 18)),
             SizedBox(height: SizeConfig.safeBlockVertical * 5),
-            Text("Thank you for using the NFC payment method,".i18n, style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
+            Text("Thank you for using the QR payment method,".i18n, style: TextStyle(fontSize: 18), textAlign: TextAlign.center),
             Spacer(),
             RaisedButton(
               color: Color(0xFF4CA7F0),

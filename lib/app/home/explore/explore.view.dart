@@ -44,19 +44,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
         panel: PanelWidget(),
         controller: _panelController,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        minHeight: SizeConfig.safeBlockVertical * 15,
+        minHeight: SizeConfig.safeBlockVertical * 8,
         snapPoint: 0.4,
-        maxHeight: SizeConfig.safeBlockVertical * 95,
+        maxHeight: SizeConfig.safeBlockVertical * 90,
         onPanelOpened: _cubit.handlePanelReachMaxHeight,
         onPanelSlide: _cubit.handlePanelOffsetChange,
         body: Stack(
           alignment: Alignment.topCenter,
           children: [
             FlutterMap(
-              options: MapOptions(
-                center: LatLng(21.016147, 105.793532),
-                zoom: 15.0,
-              ),
+              options: MapOptions(center: LatLng(21.016147, 105.793532), zoom: 15.0),
               mapController: _mapController,
               layers: [
                 TileLayerOptions(

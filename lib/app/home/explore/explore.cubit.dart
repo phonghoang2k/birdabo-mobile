@@ -10,7 +10,7 @@ part 'explore.state.dart';
 class ExploreCubit extends Cubit<ExploreState> {
   double offset = SizeConfig.safeBlockVertical * 18;
   bool isSwipeUp = false;
-  double panelHeight = SizeConfig.safeBlockVertical * 80;
+  double panelHeight = SizeConfig.safeBlockVertical * 82;
 
   ExploreCubit() : super(ExploreStateInitial()) {}
 

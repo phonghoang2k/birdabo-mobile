@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:birdablo_mobile/app/app.module.dart';
 import 'package:birdablo_mobile/app/home/explore/components/common-button/common-button.component.dart';
 import 'package:birdablo_mobile/app/home/explore/components/custom-expansion/custom-expansion.component.dart';
 import 'package:birdablo_mobile/app/home/home.module.dart';
@@ -10,7 +11,9 @@ import 'package:birdablo_mobile/resources/tickets/tickets.i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -22,12 +25,6 @@ class TicketsScreen extends StatefulWidget {
 
 class _TicketsScreenState extends State<TicketsScreen> {
   StreamSubscription<NDEFMessage> _stream;
-
-  @override
-  void initState() {
-    _toggleScan();
-    super.initState();
-  }
 
   Future<void> _startScanning() async {
     Application.toast.showToastNotification("Scanning Reader for Payment");
@@ -64,6 +61,8 @@ class _TicketsScreenState extends State<TicketsScreen> {
         Navigator.pop(context);
         return Modular.link.pushNamed(HomeModule.tickets + TicketsModule.nfcStatus);
       });
+    } else {
+      Application.toast.showToastFailed("Device not support NFC payment method".i18n);
     }
   }
 
@@ -101,89 +100,104 @@ class _TicketsScreenState extends State<TicketsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: SizeConfig.screenWidth,
-              height: SizeConfig.safeBlockVertical * 4,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color.fromRGBO(126, 182, 218, 0.3), Color.fromRGBO(216, 216, 216, 0)],
-              )),
-            ),
-            CommonButton(
-              elevation: 11,
-              onPressed: () {},
-              child: IntrinsicWidth(
-                child: Row(
-                  children: [
-                    Image.asset("assets/images/tickets/physic-card.png", height: SizeConfig.safeBlockVertical * 3),
-                    SizedBox(width: SizeConfig.safeBlockHorizontal),
-                    Text("Request Physical Card".i18n)
-                  ],
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.safeBlockVertical * 4,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color.fromRGBO(126, 182, 218, 0.3), Color.fromRGBO(216, 216, 216, 0)],
+                )),
+              ),
+              CommonButton(
+                elevation: 11,
+                onPressed: () {},
+                child: IntrinsicWidth(
+                  child: Row(
+                    children: [
+                      Image.asset("assets/images/tickets/physic-card.png", height: SizeConfig.safeBlockVertical * 3),
+                      SizedBox(width: SizeConfig.safeBlockHorizontal),
+                      Text("Request Physical Card".i18n)
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 3),
-              child: Text(
-                "Your Ticket".i18n,
-                style: TextStyle(fontSize: 40, color: Color(0xFF404040), fontWeight: FontWeight.w700),
+              Container(
+                margin: EdgeInsets.all(SizeConfig.safeBlockHorizontal * 3),
+                child: Text(
+                  "Your Ticket".i18n,
+                  style: TextStyle(fontSize: 40, color: Color(0xFF404040), fontWeight: FontWeight.w700),
+                ),
               ),
-            ),
-            Container(
-              height: SizeConfig.safeBlockVertical * 33,
-              child: Swiper(
-                itemCount: 2,
-                itemBuilder: (context, index) => index == 0 ? frontCard() : qrCodeWidget(),
+              Container(
+                height: SizeConfig.safeBlockVertical * 33,
+                child: Swiper(
+                  itemCount: 2,
+                  itemBuilder: (context, index) => index == 0 ? frontCard() : qrCodeWidget(),
+                ),
               ),
-            ),
-            CustomExpansionTile(
-              title: Text("History".i18n, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, color: Color(0xFF4CA7F0))),
-              // trailing: Card(
-              //   shape: CircleBorder(side: BorderSide.none),
-              //   child: Icon(Icons.keyboard_arrow_down, color: Color(0xFF2196F3)),
-              // ),
-              children: <Widget>[
-                ListView.separated(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) => ListTile(
-                    leading: Image.asset("assets/images/tickets/cash.png", height: SizeConfig.safeBlockVertical * 3.5),
-                    title: IntrinsicHeight(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Top Up".i18n),
-                          Text(DateFormat("d/MM/yyyy - h:mm a").format(DateTime.now())),
-                        ],
+              CustomExpansionTile(
+                initiallyExpanded: true,
+                title: Text("History".i18n, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, color: Color(0xFF4CA7F0))),
+                children: <Widget>[
+                  ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) => ListTile(
+                      leading: Image.asset("assets/images/tickets/cash.png", height: SizeConfig.safeBlockVertical * 3.5),
+                      title: IntrinsicHeight(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Top Up".i18n),
+                            Text(DateFormat("d/MM/yyyy - h:mm a").format(DateTime.now())),
+                          ],
+                        ),
                       ),
+                      trailing: Text(
+                        "+ ${NumberFormat.currency(locale: 'vi_VN', customPattern: "\đ###,###.#").format(69000)}",
+                        style: TextStyle(color: Color(0xFF528DD5)),
+                      ),
+                      onTap: () {},
                     ),
-                    trailing: Text(
-                      "+ ${NumberFormat.currency(locale: 'vi_VN', customPattern: "\đ###,###.#").format(69000)}",
-                      style: TextStyle(color: Color(0xFF528DD5)),
-                    ),
-                    onTap: () {},
-                  ),
-                  separatorBuilder: (context, index) => Divider(
-                    color: Color(0xFF545458),
-                    indent: SizeConfig.safeBlockHorizontal * 3,
-                    thickness: 0.5,
-                  ),
-                  itemCount: 5,
-                )
-              ],
-            ),
-            SizedBox(height: SizeConfig.safeBlockVertical * 10),
-          ],
+                    separatorBuilder: (context, index) =>
+                        Divider(color: Color(0xFF545458), indent: SizeConfig.safeBlockHorizontal * 3, thickness: 0.5),
+                    itemCount: 5,
+                  )
+                ],
+              ),
+              SizedBox(height: SizeConfig.safeBlockVertical * 10),
+            ],
+          ),
         ),
-      ),
-    );
+        floatingActionButton: SpeedDial(
+            animatedIcon: AnimatedIcons.view_list,
+            animatedIconTheme: IconThemeData(size: 22.0, color: Color(0xFF159AD5)),
+            visible: true,
+            activeIcon: Icons.remove,
+            elevation: 8.0,
+            backgroundColor: Color(0xFFEFEFEF),
+            curve: Curves.bounceIn,
+            children: [
+              SpeedDialChild(
+                child: Icon(FontAwesomeIcons.qrcode, color: Color(0xFF159AD5)),
+                label: 'QR Code',
+                labelStyle: TextStyle(color: Color(0xFF159AD5), fontSize: 16),
+                onTap: () => Modular.to.pushNamed(AppModule.home + HomeModule.tickets + TicketsModule.qrPayment),
+              ),
+              SpeedDialChild(
+                child: Icon(Icons.wifi_tethering, color: Color(0xFF159AD5)),
+                label: 'NFC',
+                onTap: _toggleScan,
+                labelStyle: TextStyle(color: Color(0xFF159AD5), fontSize: 16),
+              ),
+            ]));
   }
 
   Widget frontCard() => Container(

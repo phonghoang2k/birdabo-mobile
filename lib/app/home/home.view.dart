@@ -24,7 +24,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _mainModules.elementAt(_bottomNavIndex)["widget"] as Widget,
-      extendBody: true,
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
         child: BottomNavigationBar(
