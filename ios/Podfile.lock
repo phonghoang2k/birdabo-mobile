@@ -1,16 +1,22 @@
 PODS:
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - health (1.0.1):
+    - Flutter
   - location (0.0.1):
     - Flutter
+  - MTBBarcodeScanner (5.0.11)
   - nfc_in_flutter (1.0.0):
     - Flutter
-  - path_provider (0.0.1):
+  - qr_code_scanner (0.2.0):
     - Flutter
+    - MTBBarcodeScanner
   - shared_preferences (0.0.1):
     - Flutter
   - Toast (4.0.0)
@@ -18,44 +24,54 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - health (from `.symlinks/plugins/health/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - nfc_in_flutter (from `.symlinks/plugins/nfc_in_flutter/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
   trunk:
+    - MTBBarcodeScanner
     - Toast
 
 EXTERNAL SOURCES:
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  health:
+    :path: ".symlinks/plugins/health/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   nfc_in_flutter:
     :path: ".symlinks/plugins/nfc_in_flutter/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
+  qr_code_scanner:
+    :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
+  health: 44840ad4328aa5586e77bef289898bfed644a81c
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nfc_in_flutter: c656fbfb1ec5b9d021da87b0c87629d62fd5264d
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef

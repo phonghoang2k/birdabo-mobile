@@ -27,6 +27,10 @@ class AppWidget extends StatelessWidget {
             FormBuilderLocalizations.delegate,
           ],
           supportedLocales: AppLocale.locales.values.toList(),
+          builder: (context, child) => MediaQuery(
+            child: child,
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+          ),
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
             canvasColor: Colors.white,

@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:health/health.dart';
+
+enum AppState { dataNotFetched, fetchingData, dataReady, noData, authNotGranted }
 
 class ActivityScreen extends StatefulWidget {
   @override
@@ -16,6 +19,59 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
+  List<HealthDataPoint> _healthDataList = [];
+  AppState _state = AppState.dataNotFetched;
+  int _steps = 0;
+
+  Future<void> fetchData() async {
+    /// Get everything from midnight until now
+    DateTime startDate = DateTime(2020, 11, 07, 0, 0, 0);
+    DateTime endDate = DateTime(2020, 11, 07, 23, 59, 59);
+
+    HealthFactory health = HealthFactory();
+
+    /// Define the types to get.
+    List<HealthDataType> types = [
+      HealthDataType.STEPS,
+      HealthDataType.WEIGHT,
+      HealthDataType.HEIGHT,
+      HealthDataType.BLOOD_GLUCOSE,
+      HealthDataType.DISTANCE_WALKING_RUNNING,
+    ];
+
+    setState(() => _state = AppState.fetchingData);
+
+    if (await health.requestAuthorization(types)) {
+      try {
+        /// Fetch new data
+        var healthData = await health.getHealthDataFromTypes(startDate, endDate, types);
+        _healthDataList.addAll(healthData);
+      } catch (e) {
+        print("Caught exception in getHealthDataFromTypes: $e");
+      }
+
+      /// Filter out duplicates
+      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+
+      /// Print the results
+      _steps = _healthDataList.fold(0, (previousValue, element) => previousValue + element.value as int);
+
+      /// Update the UI to display the results
+      setState(() {
+        _state = _healthDataList.isEmpty ? AppState.noData : AppState.dataReady;
+      });
+    } else {
+      print("Authorization not granted");
+      setState(() => _state = AppState.dataNotFetched);
+    }
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,40 +153,34 @@ class _ActivityScreenState extends State<ActivityScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: SizeConfig.safeBlockHorizontal * 8,
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset("assets/images/activity/ion_footsteps.png"),
-                        ),
-                        SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
-                        Text("121", style: TextStyle(fontSize: 50)),
-                      ],
+                    Container(
+                      child: Image.asset("assets/images/activity/ion_footsteps.png"),
+                      width: SizeConfig.safeBlockHorizontal * 8,
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(bottom: SizeConfig.safeBlockVertical * 2),
                     ),
-                    Text("walking points"),
+                    SizedBox(width: SizeConfig.safeBlockHorizontal * 3),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [Text("$_steps", style: TextStyle(fontSize: 50)), Text("walking points")],
+                    )
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Image.asset("assets/images/activity/bus.png"),
-                          width: SizeConfig.safeBlockHorizontal * 8,
-                          alignment: Alignment.centerLeft,
-                        ),
-                        SizedBox(width: SizeConfig.safeBlockHorizontal * 2),
-                        Text("572", style: TextStyle(fontSize: 50)),
-                      ],
+                    Container(
+                      child: Image.asset("assets/images/activity/bus.png"),
+                      width: SizeConfig.safeBlockHorizontal * 8,
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.only(bottom: SizeConfig.safeBlockVertical * 2),
                     ),
-                    Text("bus points"),
+                    SizedBox(width: SizeConfig.safeBlockHorizontal * 3),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [Text("572", style: TextStyle(fontSize: 50)), Text("bus points")],
+                    )
                   ],
                 ),
               ],
@@ -147,12 +197,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             child: Row(
               children: [
                 Text("11 coupons available".i18n,
-                    style: TextStyle(
-                      color: Color(0xFF2196F3),
-                      fontSize: 16,
-                      letterSpacing: 1.1,
-                      fontWeight: FontWeight.w600,
-                    )),
+                    style: TextStyle(color: Color(0xFF2196F3), fontSize: 16, letterSpacing: 1.1, fontWeight: FontWeight.w600)),
                 Spacer(),
                 CommonButton(
                   child: Row(
