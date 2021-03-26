@@ -109,7 +109,11 @@ class _QrPaymentState extends State<QrPayment> {
   void _onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
     controller.scannedDataStream.listen((scanData) {
-      if (scanData != null) Modular.link.pushNamed(TicketsModule.qrStatus);
+      if (scanData != null) {
+        Navigator.pop(context);
+        Modular.link.pushNamed(TicketsModule.qrStatus);
+      }
+      ;
     });
   }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:birdablo_mobile/app/app.module.dart';
 import 'package:birdablo_mobile/app/home/explore/components/common-button/common-button.component.dart';
@@ -28,18 +29,22 @@ class _TicketsScreenState extends State<TicketsScreen> {
 
   Future<void> _startScanning() async {
     Application.toast.showToastNotification("Scanning Reader for Payment");
-    setState(() {
-      _stream = NFC.readNDEF(alertMessage: "Custom message with readNDEF#alertMessage").listen(
+    setState(() async {
+      // NDEFMessage message = await NFC.readNDEF(once: true).first;
+      // print("payload: ${message.tag.id}");
+      _stream = NFC.readNDEF(alertMessage: "Custom message with readNDEF#alertMessage", readerMode: NFCDispatchReaderMode()).listen(
         (NDEFMessage message) {
           if (message.isEmpty) {
             Application.toast.showToastNotification("Read empty NDEF message");
             return;
           }
           Application.toast.showToastNotification("Read NDEF message with ${message.records.length} records");
-          for (NDEFRecord record in message.records) {
-            Application.toast.showToastSuccess(
-                "Record '${record.id ?? "[NO ID]"}' with TNF '${record.tnf}', type '${record.type}', payload '${record.payload}' and data '${record.data}' and language code '${record.languageCode}'");
-          }
+          log(message.records.map((e) => e.data).toString());
+          _startAuthenticateNFC();
+          Future.delayed(Duration(seconds: 1), () {
+            Navigator.pop(context);
+            return Modular.link.pushNamed(HomeModule.tickets + TicketsModule.nfcStatus).whenComplete(_toggleScan);
+          });
         },
         onError: (error) {
           setState(() => _stream = null);
@@ -55,18 +60,18 @@ class _TicketsScreenState extends State<TicketsScreen> {
       );
     });
     // fire after 4 second: simulate connected via NFC payment
-    if (await NFC.isNDEFSupported) {
-      Future.delayed(Duration(seconds: 4), _startAuthenticateNFC);
-      Future.delayed(Duration(seconds: 5), () {
-        Navigator.pop(context);
-        return Modular.link.pushNamed(HomeModule.tickets + TicketsModule.nfcStatus);
-      });
-    } else {
-      Application.toast.showToastFailed("Device not support NFC payment method".i18n);
-    }
+    // if (await NFC.isNDEFSupported) {
+    //   Future.delayed(Duration(seconds: 4), _startAuthenticateNFC);
+    //   Future.delayed(Duration(seconds: 5), () {
+    //     Navigator.pop(context);
+    //     return Modular.link.pushNamed(HomeModule.tickets + TicketsModule.nfcStatus);
+    //   });
+    // } else {
+    //   Application.toast.showToastFailed("Device not support NFC payment method".i18n);
+    // }
   }
 
-  void _stopScanning() => {_stream?.cancel(), setState(() => _stream = null)};
+  void _stopScanning() => {_stream?.cancel(), setState(() => _stream = null), Application.toast.showToastNotification("Cancel Scan")};
 
   void _toggleScan() => _stream == null ? _startScanning() : _stopScanning();
 
@@ -188,12 +193,14 @@ class _TicketsScreenState extends State<TicketsScreen> {
               SpeedDialChild(
                 child: Icon(FontAwesomeIcons.qrcode, color: Color(0xFF159AD5)),
                 label: 'QR Code',
+                backgroundColor: Colors.white,
                 labelStyle: TextStyle(color: Color(0xFF159AD5), fontSize: 16),
                 onTap: () => Modular.to.pushNamed(AppModule.home + HomeModule.tickets + TicketsModule.qrPayment),
               ),
               SpeedDialChild(
                 child: Icon(Icons.wifi_tethering, color: Color(0xFF159AD5)),
                 label: 'NFC',
+                backgroundColor: Colors.white,
                 onTap: _toggleScan,
                 labelStyle: TextStyle(color: Color(0xFF159AD5), fontSize: 16),
               ),
